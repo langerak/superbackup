@@ -64,6 +64,7 @@ system if not present yet:
 * Nano
 * Mailx / Sendmail
 * Perl
+* Curl
 
 For as far as I could test it, the scripts should also function on the following
 architectures (for the earlier mentioned supported operating systems), but is
@@ -83,8 +84,7 @@ on the agenda is the support of the following database servers:
 * MongoDB
 * PostgreSQL
 
-Also the supported operating systems need to be expanded to:
+Also the supported operating systems needs to be expanded to:
 
 * (Open)Suse
-* Gentoo
-* Slackware
+* Fedora

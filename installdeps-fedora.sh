@@ -1,19 +1,19 @@
 #! /bin/bash
 #
-# This script contains the installation checks for the ArchLinux OS and is
+# This script contains the installation checks for the Fedora OS and is
 # part of the SuperBackup Suite created by Jeffrey Langerak.
 #
 # Bugs and/or features can be left at the repository below:
 # https://github.com/langerak/superbackup
 #
-# Starting the depency installation for ArchLinux:
+# Starting the depency installation for Fedora:
 echo -ne "Checking for dialog: Please wait...     \r"
 if [ -x /usr/bin/dialog ];
 then
         echo -ne "Checking for dialog: Present            \r"; echo
 logger -t superbackup_installer "Package dialog already installed"
 else
-    if pacman -Sqy --noconfirm dialog > /dev/null 2>&1
+    if dnf -qy install dialog > /dev/null 2>&1
     then
         echo -ne "Checking for dialog: Installed       \r"; echo
         logger -t superbackup_installer "Package dialog is now installed"
@@ -30,7 +30,7 @@ then
     echo -ne "Checking for curl: Present               \r"; echo
     logger -t superbackup_installer "Package curl already installed"
 else
-    if pacman -Sqy --noconfirm curl > /dev/null 2>&1
+    if dnf -qy install curl > /dev/null 2>&1
     then
         echo -ne "Checking for curl: Installed         \r"; echo
         logger -t superbackup_installer "Package curl is now installed"
@@ -47,7 +47,7 @@ then
     echo -ne "Checking for rsync: Present               \r"; echo
     logger -t superbackup_installer "Package rsync already installed"
 else
-    if pacman -Sqy --noconfirm rsync > /dev/null 2>&1
+    if dnf -qy install rsync > /dev/null 2>&1
     then
         echo -ne "Checking for rsync: Installed         \r"; echo
         logger -t superbackup_installer "Package rsync is now installed"
@@ -64,7 +64,7 @@ then
     echo -ne "Checking for sendmail: Present               \r"; echo
     logger -t superbackup_installer "Package sendmail already installed"
 else
-    if pacman -Sqy --noconfirm ssmtp > /dev/null 2>&1
+    if dnf -qy install sendmail > /dev/null 2>&1
     then
         echo -ne "Checking for sendmail: Installed         \r"; echo
         logger -t superbackup_installer "Package sendmail is now installed"
@@ -81,7 +81,7 @@ then
     echo -ne "Checking for bc: Present               \r"; echo
     logger -t superbackup_installer "Package bc already installed"
 else
-    if pacman -Sqy --noconfirm bc > /dev/null 2>&1
+    if dnf -qy install bc > /dev/null 2>&1
     then
         echo -ne "Checking for bc: Installed         \r"; echo
         logger -t superbackup_installer "Package bc is now installed"
@@ -98,7 +98,7 @@ then
     echo -ne "Checking for expect: Present               \r"; echo
     logger -t superbackup_installer "Package expect already installed"
 else
-    if pacman -Sqy --noconfirm expect > /dev/null 2>&1
+    if dnf -qy install expect > /dev/null 2>&1
     then
         echo -ne "Checking for expect: Installed         \r"; echo
         logger -t superbackup_installer "Package expect is now installed"
@@ -115,7 +115,7 @@ then
     echo -ne "Checking for Perl: Present               \r"; echo
     logger -t superbackup_installer "Package perl already installed"
 else
-    if pacman -Sqy --noconfirm perl > /dev/null 2>&1
+    if dnf -qy install perl > /dev/null 2>&1
     then
         echo -ne "Checking for Perl: Installed         \r"; echo
         logger -t superbackup_installer "Package perl is now installed"
@@ -132,7 +132,7 @@ then
     echo -ne "Checking for mc: Present               \r"; echo
     logger -t superbackup_installer "Package mc already installed"
 else
-    if pacman -Sqy --noconfirm mc > /dev/null 2>&1
+    if dnf -qy install mc > /dev/null 2>&1
     then
         echo -ne "Checking for mc: Installed         \r"; echo
         logger -t superbackup_installer "Package mc is now installed"
@@ -149,7 +149,7 @@ then
     echo -ne "Checking for sshfs: Present               \r"; echo
     logger -t superbackup_installer "Package sshfs already installed"
 else
-    if pacman -Sqy --noconfirm sshfs > /dev/null 2>&1
+    if dnf -qy install sshfs > /dev/null 2>&1
     then
         echo -ne "Checking for sshfs: Installed         \r"; echo
         logger -t superbackup_installer "Package sshfs is now installed"
@@ -166,7 +166,7 @@ then
     echo -ne "Checking for nano: Present               \r"; echo
     logger -t superbackup_installer "Package nano already installed"
 else
-    if pacman -Sqy --noconfirm nano > /dev/null 2>&1
+    if dnf -qy install nano > /dev/null 2>&1
     then
         echo -ne "Checking for nano: Installed         \r"; echo
         logger -t superbackup_installer "Package nano is now installed"
