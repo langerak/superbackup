@@ -157,7 +157,6 @@ else
         echo -ne "Checking for sshfs: Failed            \r"; echo
         echo -e "There was an error installing sshfs! The Backup Explorer will not be available!"
         logger -t superbackup_installer "Package sshfs not installed due to an error, but continueing..."
-        exit
     fi
 fi
 echo -ne "Checking for nano: Please wait...       \r"

@@ -10,7 +10,7 @@
 echo -ne "Checking for dialog: Please wait...     \r"
 if [ -x /usr/bin/dialog ];
 then
-        echo -ne "Checking for dialog: Present            \r"; echo
+    echo -ne "Checking for dialog: Present            \r"; echo
 logger -t superbackup_installer "Package dialog already installed"
 else
     if yum -qy install dialog > /dev/null 2>&1
@@ -157,7 +157,6 @@ else
         echo -ne "Checking for sshfs: Failed            \r"; echo
         echo -e "There was an error installing sshfs! The Backup Explorer will not be available!"
         logger -t superbackup_installer "Package sshfs not installed due to an error, but continueing..."
-        exit
     fi
 fi
 echo -ne "Checking for nano: Please wait...       \r"

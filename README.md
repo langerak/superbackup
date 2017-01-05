@@ -17,6 +17,15 @@ be created based on the backup of yesterday (with exception of Monday).
 backup history. These are always full backups. The weekly backup is created on
 Monday and the monthly backup on the 1st of the month.
 
+The backups will be placed on the remote machine in a simple construction:
+
+* The hostname of the local machine is created as a folder on the remote machine
+* Inside the hostname folder the days of the week (1 to 7) will contain the
+backup data for that day
+
+Based on this construction you can backup multiple hosts to 1 remote backup
+server!
+
 # What are the local system requirements?
 The script has been tested on the following systems and is known to work:
 
@@ -24,6 +33,8 @@ The script has been tested on the following systems and is known to work:
 * CentOS 5 up to CentOS 7
 * Debian 5 up to Debian 8
 * ArchLinux and derivates
+* Fedora
+* (Open)SUSE
 
 For the scripts to run at least Bash 3 is needed. For better code handling I
 will start shifting to Bash 4 so the requirements may change later on. For now
@@ -83,8 +94,3 @@ on the agenda is the support of the following database servers:
 
 * MongoDB
 * PostgreSQL
-
-Also the supported operating systems needs to be expanded to:
-
-* (Open)Suse
-* Fedora
