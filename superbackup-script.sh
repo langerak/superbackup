@@ -6,7 +6,7 @@
 # https://github.com/langerak/superbackup
 #
 # Setting global version used for updates:
-VERSION="0.9.0"
+VERSION="1.0.0"
 cur_epoch=`date +%s`
 export LANG="en_US.UTF-8"
 export LC_NUMERIC="en_US.UTF-8"
