@@ -73,7 +73,7 @@ sqldumps()
 	logger -t superbackup_script "Started MySQL dump procedure"
 	if [ -d /usr/local/cpanel ];
 	then
-	        echo -e "\n[MYSQL DATABASE DUMPS]"
+        echo -e "\n[MYSQL DATABASE DUMPS]"
 		echo -ne "Testing MySQL connectivity: Please wait...  \r"
 		mysql -u $MYSQLUSER > /dev/null 2>&1 << TEST
 exit
@@ -190,8 +190,8 @@ TEST
 }
 autoupgrademail()
 {
-mail -s '[BACKUP] Backupscript upgraded on '$H'' $email <<AUTOUPGRADEMAIL
-Dear customer,
+mail -s '[SUPERBACKUP] Backupscript upgraded on '$H'' $email <<AUTOUPGRADEMAIL
+Dear user,
 
 Via this way we would like to let you know that the backupscript running
 on $H has been automatically upgraded.
@@ -201,22 +201,22 @@ available for use.
 
 Changelog:
 The changelog can be found at the URL below:
-http://download.superbackup.com/pub/files/scripts/backup/changelog-backupscript.txt
+https://github.com/langerak/superbackup/commits/master
 
 Documentation:
 For more information, please refer to the backup manual found below:
-http://download.superbackup.com/pub/files/scripts/backup/superbackup-backup-manual.pdf
+https://github.com/langerak/superbackup/wiki
 
 Kind regards,
 
-superbackup Support
+SuperBackup Script on $H
 AUTOUPGRADEMAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 upgrademail()
 {
-mail -s '[BACKUP] Backup update available on '$H'!' $email <<UPGRADEMAIL
-Dear customer,
+mail -s '[SUPERBACKUP] Backup update available on '$H'!' $email <<UPGRADEMAIL
+Dear user,
 
 Via this way we would like to let you know there is an upgrade available for the backupscript
 running on machine $H.
@@ -226,153 +226,147 @@ You currently have version $version installed and available is version $newversi
 Upgrade Instructions:
 1: Open the SuperBackup installer (see 1a for download instructions)
 1a: If you need to download the tool, please use the following commands:
-wget -O superbackup-backup-installer http://download.superbackup.com/pub/files/scripts/backup/superbackup-backup-installer.txt
-chmod +x superbackup-backup-installer
-./superbackup-backup-installer
+curl -s -o superbackup-installer.sh https://raw.githubusercontent.com/langerak/superbackup/master/superbackup-installer.sh
+chmod +x superbackup-installer.sh
+./superbackup-installer.sh
 2: Select the upgrade option and select OK.
 3: Let the script search for the update and let it install the script for you.
 4: Now your backupscript is up-to-date.
 
 Changelog:
 The changelog can be found at the URL below:
-http://download.superbackup.com/pub/files/scripts/backup/changelog-backupscript.txt
+https://github.com/langerak/superbackup/commits/master
 
 Documentation:
 For more information, please refer to the backup manual found below:
-http://download.superbackup.com/pub/files/scripts/backup/superbackup-backup-manual.pdf
+https://github.com/langerak/superbackup/wiki
 
 Kind regards,
 
-superbackup Support
+SuperBackup Script on $H
 UPGRADEMAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 accountalmostfull()
 {
-mail -s '[BACKUP] Backupaccount '$BUSER' is almost full!' $email <<ALMOSTFULLMAIL
-Dear customer,
+mail -s '[SUPERBACKUP] Remote disk on '$BSERVER' for '$BUSER' is almost full!' $email <<ALMOSTFULLMAIL
+Dear user,
 
-Via this way we would like to draw your attention regarding your backupaccount $BUSER used
-at $H on backupserver $BSERVER.
+Via this way we would like to draw your attention regarding your backups for host:
+$H.
 
-Currently, the account $BUSER has used $QUOTAUSE% of it's quota, meaning that the account
-is almost full! This could lead to undesirable situations if the account reaches 100%.
+Currently, the remote disk on $BSERVER for account $BUSER has used $QUOTAPERCUSE%
+of it's total diskspace (total: $QUOTATOTALSIZE GB). When this reaches 100% it will
+not be possible to create new backups anymore.
 
 There are 3 solutions available:
 
-1. Upgrade your backupaccount (if using a SuperBackupaccount)
-If you want to upgrade your backupaccount, refer to the URL below for our pricing page
-and send an email to support@superbackup.nl regarding this backupaccount and to what size
-the account should be upgraded:
-(for pricing, see the URL below)
-https://www.superbackup.com/configurator/prices/
+1. Free up space on the remote server:
+Maybe old data can be cleared from the remote disk to free up space
+and continue the backups.
 
-2. Lower the retention of the backups.
-If you have given extra weekly and/or monthly retention, try lowering it and remove the
-appropriate week and/or month from the backupserver in order to free up the space that
-is not needed anymore.
-The retention can be lowered via the SuperBackup Installer using the Configuration
-Editor and the backups can be cleared using (S)FTP or via the Installer using the
-Backup Explorer option.
+2. Lower the retention of the backups:
+You currently have set the retention to $WEKEN weeks and $MAANDEN months.
+If the retention above is not 0 for one of the periods you may want
+to lower the retention in the backup configuration to use less space.
 
-3. Clean up any unneeded files from the server and backupserver.
-Check if there are unneeded files and/or folders on the VPS that can be removed. If
-there are files and/or folders that do not need to be backupped, please place them
-on the exclude list of rsync (can be done via the Installer using the Excludes List
-option. Also make sure to remove these files and/or folders from the backupserver
-as well, this can be done using (S)FTP or via the Installer using the Backup Explorer
-option.
+Do note that you have to remove the unnecessary data from the remote
+server yourself!
 
-Manual:
-The SuperBackup Operation Manual can be found below:
-http://download.superbackup.com/pub/files/scripts/backup/superbackup-backup-manual.pdf
+3. Check for unwanted backup data:
+It may be possible that there are certain directories on this machine
+that do not have to be backupped. If you happen to have certain
+directories, you can add them to the exclude list that the SuperBackup
+script uses. Please start the SuperBackup Installer and select the
+Exclude List editor to add unneeded directories or files.
 
-Support:
-Before contacting superbackup, please make sure that you have looked into options 2 and 3
-and have read the manual, else we will not be able to fully assist and support you.
-Should you not know what is best to do, please send an email to support@superbackup.nl
-regarding this backupaccount and state your question
+To edit the backup configuration please use the configuration editor
+that is available from within the SuperBackup Installer.
+
+Do note that you have to remove the unnecessary data from the remote
+server yourself!
+
+Documentation:
+For more information, please refer to the backup manual found below:
+https://github.com/langerak/superbackup/wiki
 
 Kind regards,
 
-superbackup Support
+SuperBackup Script on $H
 ALMOSTFULLMAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 accountfull()
 {
-mail -s '[BACKUP] Backupaccount '$BUSER' is full!' $email <<FULLMAIL
-Dear customer,
+mail -s '[SUPERBACKUP] Remote disk on '$BSERVER' for '$BUSER' is full!' $email <<FULLMAIL
+Dear user,
 
-Via this way we would like to draw your attention regarding your backupaccount $BUSER
-used at $H on backupserver $BSERVER.
+Via this way we would like to draw your attention regarding your backups for host:
+$H.
 
-Currently this account has reached it's quota limit, meaning that the account
-is completely filled and no backups are made from this point. This could lead
-to undesirable situations if your server fails and you are in need of your backups.
+Currently, the remote disk on $BSERVER for account $BUSER has used 100%
+of it's total diskspace (total: $QUOTATOTALSIZE GB). At this point no
+backups can be created anymore.
 
 There are 3 solutions available:
 
-1. Upgrade your backupaccount (if using a SuperBackupaccount)
-If you want to upgrade your backupaccount, refer to the URL below for our pricing page
-and send an email to support@superbackup.nl regarding this backupaccount and to what size
-the account should be upgraded:
-(for pricing, see the URL below)
-https://www.superbackup.com/configurator/prices/
+1. Free up space on the remote server:
+Maybe old data can be cleared from the remote disk to free up space
+and continue the backups.
 
-2. Lower the retention of the backups.
-If you have given extra weekly and/or monthly retention, try lowering it and remove the
-appropriate week and/or month from the backupserver in order to free up the space that
-is not needed anymore.
-The retention can be lowered via the SuperBackup Installer using the Configuration
-Editor and the backups can be cleared using (S)FTP or via the Installer using the
-Backup Explorer option.
+2. Lower the retention of the backups:
+You currently have set the retention to $WEKEN weeks and $MAANDEN months.
+If the retention above is not 0 for one of the periods you may want
+to lower the retention in the backup configuration to use less space.
 
-3. Clean up any unneeded files from the server and backupserver.
-Check if there are unneeded files and/or folders on the VPS that can be removed. If
-there are files and/or folders that do not need to be backupped, please place them
-on the exclude list of rsync (can be done via the Installer using the Excludes List
-option. Also make sure to remove these files and/or folders from the backupserver
-as well, this can be done using (S)FTP or via the Installer using the Backup Explorer
-option.
+Do note that you have to remove the unnecessary data from the remote
+server yourself!
 
-Manual:
-The SuperBackup Operation Manual can be found below:
-http://download.superbackup.com/pub/files/scripts/backup/superbackup-backup-manual.pdf
+3. Check for unwanted backup data:
+It may be possible that there are certain directories on this machine
+that do not have to be backupped. If you happen to have certain
+directories, you can add them to the exclude list that the SuperBackup
+script uses. Please start the SuperBackup Installer and select the
+Exclude List editor to add unneeded directories or files.
 
-Support:
-Before contacting superbackup, please make sure that you have looked into options 2 and 3
-and have read the manual, else we will not be able to fully assist and support you.
-Should you not know what is best to do, please send an email to support@superbackup.nl
-regarding this backupaccount and state your question
+To edit the backup configuration please use the configuration editor
+that is available from within the SuperBackup Installer.
+
+Do note that you have to remove the unnecessary data from the remote
+server yourself!
+
+Documentation:
+For more information, please refer to the backup manual found below:
+https://github.com/langerak/superbackup/wiki
 
 Kind regards,
 
-superbackup Support
+SuperBackup Script on $H
 FULLMAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 mysql_error()
 {
-mail -s "[BACKUP] MySQL connection error on $H" $wmail <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] MySQL connection error on $H" $email <<MAIL
+Dear user,
 
-This is a message to inform you that there is a problem regarding the MySQL
-dumps feature.
+This is a message to inform you that there is a problem regarding the
+MySQL dumps feature.
 
-The backupscript has tested the MySQL connection before the dumps are started
-and this connection has failed.
+The backupscript has tested the MySQL connection before the dumps are
+started and this connection has failed. Backups of your data is still
+created but without MySQL dumps (only raw data).
 
-Currently, the following credentials are given:
+According to the configuration the following credentials are given:
 
 [MYSQL]
 Username..: $MYSQLUSER
 Password..: See backup config
 
-Please check if these credentials are still in use, if they have changed, please
-change the credentials using the Configuration Editor via the backup installer.
-
-At this time, no SQL dumps have been made.
+Please check if these credentials are still in use, if they have
+changed, please change the credentials using the Configuration Editor
+via the SuperBackup Installer. You may also want to check whether
+MySQL is still running.
 
 Kind regards,
 
@@ -382,134 +376,153 @@ logger -t superbackup_script "Emailed notification to $email"
 }
 lockmail()
 {
-mail -s "[BACKUP] Current job not started on $H" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Current job not started on $H" $email <<MAIL
+Dear user,
 
-This is a message to inform you that the backupscript could not start, because
-the backup lockfile still exists.
+This is a message to inform you that the backupscript could not start
+because the backup lockfile still exists.
 
-The script has investigated this problem and has stated that the current
-running backup process has not passed the 24 hour run limit yet.
+The script has investigated this problem and has stated that the
+current running backup process has not passed the 24 hour run limit
+yet.
 
-Therefore this backup job will not continue to make sure that the current process
-can succeed without errors.
+Therefore this backup job will not continue to make sure that the
+current process can succeed without errors.
 
-Should the next backup task result in a running process as well, then the old
-backup process will be killed and that job will start instead of it, this to
-prevent any hanging scripts and backups not being made.
+Should the next backup task result in a running process as well, then
+the old backup process will be killed and that job will start instead
+of it, this to prevent any hanging scripts and backups not being
+made.
 
-Currently, there is no intervention needed from your side, the backupscript has
-already chosen the appropriate solution at this point.
+Currently, there is no intervention needed from your side, the
+backupscript has already chosen the appropriate solution at this
+point.
 
 Your files have not been backupped during this session.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 lockmail24h()
 {
-mail -s "[BACKUP] Notification regarding backup process on $H" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Notification regarding the backup process on $H" $email <<MAIL
+Dear user,
 
-This is a message to inform you that the backupscript has stated that the last
-initiated job was still running after 24 hours. Since this is unusual behaviour
-and could lead to hanging backup processes the script has killed the old
-task so this session can be started.
+This is a message to inform you that the backupscript has stated that
+the last initiated job was still running after 24 hours. Since this
+is unusual behaviour and could lead to hanging backup processes the
+script has killed the old task so this session can be started.
 
-At this point, if you do not receive an account warning stating that the account
-is (almost) full, all should be fine again. 
-Should this process hang for 24 hours as well, you will receive this message
-again, then the backupscript needs investigation to see what is causing the troubles.
+At this point, if you do not receive an account warning stating that
+the account is (almost) full, all should be fine again. Should this
+process hang for 24 hours as well, you will receive this message
+again, then the backupscript needs investigation to see what is
+causing the troubles.
 
 The details that the script uses are (for investigational purposes):
 Backupserver...: $BSERVER
 Username.......: $BUSER
 SSH Port.......: $SSHPORT
+Keyfile........: $PRIVKEY
+Remote path....: $REMOTEPATH
+Local path.....: $BACKUPROOT
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 rsync_error_12()
 {
-mail -s "[BACKUP] Critical error occurred during the backup on $H" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Critical error occurred during the backup on $H" $email <<MAIL
+Dear user,
 
-This is a message to inform you that your backup has not succeeded, because the
-backupscript was not able to connect to the given backupserver.
+This is a message to inform you that your backup has not succeeded
+because the backupscript was not able to connect to the given
+backupserver.
 
-The details that the script uses are:
+The details that the backupscript uses are:
 Backupserver...: $BSERVER
 Username.......: $BUSER
 SSH Port.......: $SSHPORT
+Keyfile........: $PRIVKEY
+Remote path....: $REMOTEPATH
+Local path.....: $BACKUPROOT
 
-Please check the above settings and make sure they are correct, in addition, try
-connecting to the server by hand using a FTP client like FileZilla.
+Please check the above settings and make sure they are correct, in
+addition, try connecting to the server by hand using a FTP client
+like FileZilla.
 
-A sample SSH connection can be setup using the example below:
-ssh -p $SSHPORT -i $PRIVKEY $BUSER@$BSERVER quota
-
-This should return the current quota for that account, if this works, the SSH
-connection was successful.
+A sample SSH connection can be setup using the Test Suite that is
+available from within the SuperBackup Installer.
 
 Your files have not been backupped at this time.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 rsync_error_20()
 {
-mail -s "[BACKUP] Critical error occurred during the backup on $H" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Critical error occurred during the backup on $H" $email <<MAIL
+Dear user,
 
-This is a message to inform you that your backup has not succeeded during this
-session, because the backupscript received a kill from the system.
-It's possible that you or another admin stopped the backup on purpose, if so,
-please ignore this error.
+This is a message to inform you that your backup has not succeeded
+during this session, because the backupscript received a kill from
+the system.
+
+It's possible that you or another admin stopped the backup on
+purpose, if so, please ignore this error.
 
 Your files have not been backupped at this time.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 rsync_error_30()
 {
-mail -s "[BACKUP] Notification regarding the backup on $H!" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Notification regarding the backup on $H!" $email <<MAIL
+Dear user,
 
-This is a message to inform you that the this backup session did not run
-because there was a timeout connecting to $BSERVER using user $BUSER.
-Please check your network settings and try if you are able to set
-up a connection manually from the VPS using FTP/SFTP.
+This is a message to inform you that the this backup session did not
+run because there was a timeout connecting to $BSERVER using user
+$BUSER. Please check your network settings and try if you are able
+to set up a connection manually from the VPS using FTP/SFTP.
+
+The details that the backupscript uses are:
+Backupserver...: $BSERVER
+Username.......: $BUSER
+SSH Port.......: $SSHPORT
+Keyfile........: $PRIVKEY
+Remote path....: $REMOTEPATH
+Local path.....: $BACKUPROOT
 
 Your files have not been backupped at this time.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 rsync_error_35()
 {
-mail -s "[BACKUP] Notification regarding the backup on $H!" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Notification regarding the backup on $H!" $email <<MAIL
+Dear user,
 
-This is a message to inform you that the this backup session did not run
-because of the following reasons:
-- Rsync is not installed on the backupserver $BSERVER
-- Rsyncd is not running on the backupserver $BSERVER
+This is a message to inform you that the this backup session did not
+run because of the following reasons:
+- Rsync is not installed on the remote server $BSERVER
+- Rsyncd is not running on the remote server $BSERVER
 
 Please check the above on $BSERVER and try again.
 
@@ -517,99 +530,111 @@ Your files have not been backupped at this time.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 rsync_error_134()
 {
-mail -s "[BACKUP] Notification regarding the backup on $H!" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Notification regarding the backup on $H!" $email <<MAIL
+Dear user,
 
-This is a message to inform you that the this backup session did not run
-because it received an abort signal from the system.
+This is a message to inform you that the this backup session did not
+run because it received an abort signal from the system.
 
-Please check if any process limiting facilities are running, or if another
-administrator of this server has stopped the job and try again.
+Please check if any process limiting facilities are running, or if
+another administrator of this server has stopped the job and try
+again.
 
 Your files have not been backupped at this time.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 rsync_error_137()
 {
-mail -s "[BACKUP] Notification regarding the backup on $H!" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Notification regarding the backup on $H!" $email <<MAIL
+Dear user,
 
-This is a message to inform you that the backup has generated an internal
-error and therefore halted. This is mostly caused by folders that use
-a chroot environment and is often used with DNS servers.
+This is a message to inform you that the backup has generated an
+internal error and therefore halted. This is mostly caused by folders
+that use a chroot environment (as with some DNS servers for example).
 
-There is a log available with those warnings and is placed at the following
-location:
+There is a log available with those warnings and is placed at the
+following location:
 /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
 
-Please refer to the logfile above and locate the file and/or folder that
-is cuasing the crash and place it on the exclude list via the installer and
-try again.
+Please refer to the logfile above and locate the file and/or folder
+that is cuasing the crash and place it on the exclude list via the
+installer and try again.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 rsync_error_unknown()
 {
-mail -s "[BACKUP] Critical error occurred during the backup!" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Critical error occurred during the backup!" $email <<MAIL
+Dear user,
 
-This is a message to inform you that your backup has not succeeded, because the
-backup process stopped with a unkown error code $retval.
+This is a message to inform you that your backup has not succeeded
+because the backup process stopped with a undocumented error
+code $retval.
 
 The details that the script uses are:
 Backupserver...: $BSERVER
 Username.......: $BUSER
 SSH Port.......: $SSHPORT
+Keyfile........: $PRIVKEY
 Remote path....: $REMOTEPATH
 Local path.....: $BACKUPROOT
 
-Please check the above settings and make sure they are correct, in addition, try
-connecting to the server by hand using a FTP client like FileZilla.
+Please check the above settings and make sure they are correct, in
+addition, try connecting to the server by hand using a FTP client
+like FileZilla.
 
-In case of error 255 this mostly means that the backupserver cannot be reached.
-Please make sure that you are able to login via password and check if the key
-is present in the .ssh folder in authorized_keys file.
+In case of error 255 this mostly means that the backupserver cannot
+be reached. Please make sure that you are able to login via password
+and check if the key is present in the .ssh folder in authorized_keys
+file.
 
 Your files have not been backupped at this time.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
 csferror()
 {
-mail -s "[BACKUP] Critical error occurred during the backup!" $email <<MAIL
-Dear customer,
+mail -s "[SUPERBACKUP] Critical error occurred during the backup!" $email <<MAIL
+Dear user,
 
-This is a message to inform you that your backup has not succeeded, because the
-backupscript could not add the backupserver IP to the CSF whitelist!
+This is a message to inform you that your backup has not succeeded
+because the backupscript could not add the backupserver IP to the CSF
+whitelist!
 
 Please issue the following command manually to fix this issue:
 
-csf -a $backupip
+# csf -a $backupip
+
+Should the above command fail, check if CSF is running or is in
+testing mode. If CSF is in testing mode you may add the IP with
+the following command so it is known by CSF once you enable it:
+
+# echo "$backupip # Backupserver for $H" >> /etc/csf/csf.allow
 
 Your files have not been backupped at this time.
 
 Kind regards,
 
-SuperBackupscript
+SuperBackup Script on $H
 MAIL
 logger -t superbackup_script "Emailed notification to $email"
 }
@@ -1116,7 +1141,7 @@ then
 	rm -f /tmp/backup_quota > /dev/null 2>&1
     echo -e "\n[QUOTA]"
     echo -e "- The account is "$QUOTATOTALSIZE"GB in size and there is "$QUOTAENDFREE"GB ($QUOTAPERCENTFREE%) left."
-    echo -e "- This session consumed "$QUOTADIFF"GB of diskspace."
+    echo -e "- This session consumed "$QUOTADIFF"GB of diskspace on the remote server."
 fi
 echo -e "\n[BACKUP ENDED ON `date '+%d-%m-%Y'` AT `date '+%H:%M:%S'`]"
 # Removing lockfile:
