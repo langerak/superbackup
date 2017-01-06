@@ -158,10 +158,10 @@ TEST
 				echo -ne "Dumping $db: Please wait...   \r"
                 if [[ "$db" == "mysql" ]]
                 then
-                    $NICE_OPTS mysqldump --opt --single-transaction --quick --hex-blob --events --force --user=$MYSQLUSER --password=$MUSQLPASS $MYSQLBACKUPDIR$db | $NICE_OPTS gzip > $db.gz 2> /dev/null
+                    $NICE_OPTS mysqldump --opt --single-transaction --quick --hex-blob --events --force --user=$MYSQLUSER --password=$MYSQLPASS $db | $NICE_OPTS gzip > $MYSQLBACKUPDIR$db.gz 2> /dev/null
                     echo -ne "Dumping $db: OK (`ls -hl $MYSQLBACKUPDIR | grep $db.gz | awk '{print $5}'`B)            \r"; echo
                     logger -t superbackup_script "Database $db dumped with a size of `ls -hl $MYSQLBACKUPDIR | grep $db.gz | awk '{print $5}'`B"
-                elif $NICE_OPTS mysqldump --opt --single-transaction --hex-blob --force --quick --user=$MYSQLUSER --password=$MYSQLPASS $MYSQLBACKUPDIR$db | $NICE_OPTS gzip > $db.gz 2> /dev/null
+                elif $NICE_OPTS mysqldump --opt --single-transaction --hex-blob --force --quick --user=$MYSQLUSER --password=$MYSQLPASS $db | $NICE_OPTS gzip > $MYSQLBACKUPDIR$db.gz 2> /dev/null
                 then
                    	echo -ne "Dumping $db: OK (`ls -hl $MYSQLBACKUPDIR | grep $db.gz | awk '{print $5}'`B)            \r"; echo
                    	logger -t superbackup_script "Database $db dumped with a size of `ls -hl $MYSQLBACKUPDIR | grep $db.gz | awk '{print $5}'`B"
