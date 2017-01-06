@@ -766,7 +766,7 @@ then
 	# If the quota is above 90% we send out an email:
 	if [ "$NOTIFICATIONS" = 'Y' ];
 	then
-		if [ $QUOTPERCAUSE -ge 90  -a $QUOTAPERCUSE -le 99 ];
+		if [ $QUOTAPERCUSE -ge 90  -a $QUOTAPERCUSE -le 99 ];
 		then
 			echo "BACKUP WARNING - Account almost full ("$QUOTAPERCUSE"%)" > /etc/superbackup/nagios.state
 			for email in `cat /etc/superbackup/recipients.mail`
