@@ -20,8 +20,8 @@ Monday and the monthly backup on the 1st of the month.
 The backups will be placed on the remote machine in a simple construction:
 
 * The hostname of the local machine is created as a folder on the remote machine
-* Inside the hostname folder the days of the week (1 to 7) will contain the
-backup data for that day
+* Inside the hostname folder the days of the week (1 to 7) are created as folders
+and contain the backup data for that day
 
 Based on this construction you can backup multiple hosts to 1 remote backup
 server!
@@ -39,6 +39,13 @@ The script has been tested on the following systems and is known to work:
 For the scripts to run at least Bash 3 is needed. For better code handling I
 will start shifting to Bash 4 so the requirements may change later on. For now
 with Bash 3 alot of obsolete OS'es will still work.
+
+As for the hardware requirements: The scripts have been tested on embedded
+hardware with only 64MB of RAM (on ARMv5) with success. The reverse has been tested as
+well, so it functioned as a server well. Do note that especially CPU, bandwidth
+and disk I/O are more important for rsync to function instead of RAM. Although
+rsync is known for pretty fluent I/O operations you may be able to tune it
+by lowering or increasing the bandwidth limit.
 
 For the backups itself at least rsync 3 is needed. Anything prior to version
 3 is not supported.
@@ -59,8 +66,11 @@ At this point the following panels are supported:
 The MySQL configuration from the above panels is used to create MySQL dumps.
 
 # Can it handle quotas?
-Yes, but you have to implement filesystem quota on the remote server yourself
-else this will not be available and all space on the remote end can be used.
+It assumes that the remote end has a shell available and the script will ask
+the remote disk usage information like the total size and free space to calculate
+some basic statistics for you. Filesystem quotas itself is currently not supported
+nor will it be supported very soon as the script always needs to be run as root
+and filesystem quotas thus are unavailable for the root user.
 
 # What packages does the SuperBackup use?
 For the full suite to funtion the following software will be installed on the
