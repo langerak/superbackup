@@ -66,7 +66,7 @@ At this point the following panels are supported:
 The MySQL configuration from the above panels is used to create MySQL dumps.
 
 # Can it handle quotas?
-It assumes that the remote end has a shell available and the script will ask
+It assumes that the remote server has a shell available and the script will ask
 the remote disk usage information like the total size and free space to calculate
 some basic statistics for you. Filesystem quotas itself is currently not supported
 nor will it be supported very soon as the script always needs to be run as root
@@ -80,23 +80,23 @@ system if not present yet:
 * Expect
 * BC
 * Rsync
-* SSHFS
-* Midnight Commander
+* SSHFS (optional)
+* Midnight Commander (optional)
 * Nano
 * Mailx / Sendmail
 * Perl
 * Curl
 
-For as far as I could test it, the scripts should also function on the following
-architectures (for the earlier mentioned supported operating systems), but is
-not limited to it:
+For as far as testing was done, the scripts should also function on the
+following architectures (for the earlier mentioned supported operating systems)
+but is not limited to it:
 
 * x86(_64)
 * arm
 * mips
 * powerpc
 
-* What are your future plans?
+# What are your future plans?
 The backupscript was originally designed to have a simple way of creating
 backups. As it is now more mature than when I started with it I want to
 expand the featureset of the scripts. One of the main features that are
