@@ -784,10 +784,6 @@ then
 	QUOTAUSE=$(cat /tmp/backup_quota | awk '{print $4}' | cut -d G -f 1)
 	QUOTASTARTFREE=$(cat /tmp/backup_quota | awk '{print $5}' | cut -d G -f 1)
 	QUOTAPERCUSE=$(cat /tmp/backup_quota | awk '{print $6}' | cut -d % -f 1)
-	# UNIT=$(grep $BUSER /tmp/backup_quota | awk '{print $2}' | rev | cut -c -1)
-    # QUOTATOTALSIZE=$(grep $BUSER /tmp/backup_quota | awk '{print $2}' | tail -1 | cut -d $UNIT -f 1)
-    # QUOTAUSE=$(grep $BUSER /tmp/backup_quota | awk '{print $5}' | tail -1 | cut -d % -f 1)
-    # QUOTASTARTFREE=$(grep $BUSER /tmp/backup_quota | awk '{print $4}' | tail -1 | cut -d $UNIT -f 1)
 	# If the quota is above 90% we send out an email:
 	if [ "$NOTIFICATIONS" = 'Y' ];
 	then

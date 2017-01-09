@@ -6,9 +6,9 @@ create backups and MySQL dumps of the environments that the script is installed
 on.
 
 # How does SuperBackup create backups?
-It uses the rsync tool to create the backups, because of this it is quite
-convenient for remote disk usage. The script uses a retention schema that
-creates backups as follows:
+It uses rsync to create the backups, because of this it is quite convenient for
+remote disk usage. The script uses a retention schema that creates backups as
+follows:
 
 * On Monday a full backup is created starting from the configured backup root
 * The rest of the weekdays a incremental backup (only the changed files) will
@@ -73,7 +73,7 @@ nor will it be supported very soon as the script always needs to be run as root
 and filesystem quotas thus are unavailable for the root user.
 
 # What packages does the SuperBackup use?
-For the full suite to funtion the following software will be installed on the
+For the full suite to function the following software will be installed on the
 system if not present yet:
 
 * Dialog
