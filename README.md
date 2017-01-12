@@ -1,7 +1,7 @@
 # SuperBackup Backup Suite
 
 # What is SuperBackup?
-SuperBackup is a set of simple, yet powerful, bash scripts that allows users to
+SuperBackup is a set of simple yet powerful bash scripts that allows users to
 create backups and MySQL dumps of the environments that the script is installed
 on.
 
@@ -33,8 +33,8 @@ The script has been tested on the following systems and is known to work:
 * CentOS 5 up to CentOS 7
 * Debian 5 up to Debian 8
 * ArchLinux and derivates
-* Fedora
-* (Open)SUSE
+* Fedora (with dnf)
+* (Open)SUSE (as of 13.1)
 
 For the scripts to run at least Bash 3 is needed. For better code handling I
 will start shifting to Bash 4 so the requirements may change later on. For now
