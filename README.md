@@ -104,3 +104,14 @@ on the agenda is the support of the following database servers:
 
 * MongoDB
 * PostgreSQL
+
+# Reporting issues
+It's always that you may find issues in the scripts, please do file
+issues in the issue tracker so that I'm aware of the issue and am
+able to investigate the issue further. When sending in a new issue
+please try to report the following information:
+
+* OS / platform used
+* What the exact error is, preferrably a copy-paste or screenshot
+* Which script caused the issue
+* How am I able to reproduce the issue
