@@ -449,11 +449,8 @@ esac
                         echo "56" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Dropped $dbsource" 8 60; sleep 1
 						logger -t backup_restore "Dropped database $dbsource"
                     else
-                        dialog --backtitle "$backtitle_databases" --title "$title" --msgbox "\nThere was an error dropping database $dbsource!\n\nWill now exit" 9 60
-						logger -t backup_restore "Could not drop database $dbsource, exiting"
-						rm -f $dbsource > /dev/null 2>&1
-						clear
-						exit
+                        echo "60" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: $dbsource does not exit" 8 60; sleep 1
+						logger -t backup_restore "Could not drop database $dbsource, does not exist (anymore)"
 	                fi
 	                echo "62" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Creating $dbsource" 8 60
 	                if mysql --user=$MYSQLUSER -e "CREATE DATABASE "$dbtarget";"
@@ -532,10 +529,8 @@ esac
                         echo "56" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Dropped $dbsource" 8 60; sleep 1
 						logger -t backup_restore "Dropped database $dbsource"
                     else
-                        dialog --backtitle "$backtitle_databases" --title "$title" --msgbox "\nThere was an error dropping database $dbsource!\n\nWill now exit" 9 60
-						logger -t backup_restore "Could not drop database $dbsource, exiting"
-                        clear
-                        exit
+                        echo "60" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: $dbsource does not exit" 8 60; sleep 1
+						logger -t backup_restore "Could not drop database $dbsource, does not exist (anymore)"
                     fi
                     echo "62" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Creating $dbsource" 8 60
                     if mysql --user=$MYSQLUSER --password=$MYSQLPASS -e "CREATE DATABASE "$dbtarget";"
@@ -696,10 +691,8 @@ esac
                         echo "56" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Dropped $dbsource" 8 60; sleep 1
 						logger -t backup_restore "Dropped database $dbsource"
                     else
-                        dialog --backtitle "$backtitle_databases" --title "$title" --msgbox "\nThere was an error dropping database $dbsource!\n\nWill now exit" 9 60
-						logger -t backup_restore "Could not drop database $dbsource, exiting"
-                        clear
-                        exit
+                        echo "60" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: $dbsource does not exit" 8 60; sleep 1
+						logger -t backup_restore "Could not drop database $dbsource, does not exist (anymore)"
                     fi
                     echo "62" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Creating $dbtarget" 8 60
                     if mysql --user=$MYSQLUSER -e "CREATE DATABASE "$dbtarget";"
@@ -776,11 +769,8 @@ esac
                     echo "56" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Dropped $dbsource" 8 60; sleep 1
 					logger -t backup_restore "Dropped database $dbsource"
                 else
-                    dialog --backtitle "$backtitle_databases" --title "$title" --msgbox "\nThere was an error dropping database $dbsource!\n\nWill now exit" 9 60
-					logger -t backup_restore "Could not drop database $dbsource, exiting"
-					rm -f $dbsource > /dev/null 2>&1
-                    clear
-                    exit
+                    echo "60" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: $dbsource does not exit" 8 60; sleep 1
+					logger -t backup_restore "Could not drop database $dbsource, does not exist (anymore)"
 	            fi
                 echo "62" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Creating $dbtarget" 8 60
                 if mysql --user=$MYSQLUSER --password=$MYSQLPASS -e "CREATE DATABASE "$dbtarget";"
@@ -946,11 +936,8 @@ esac
                     echo "56" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Dropped $dbsource" 8 60; sleep 1
 					logger -t backup_restore "Dropped old database $dbsource"
                 else
-                    dialog --backtitle "$backtitle_databases" --title "$title" --msgbox "\nThere was an error dropping database $dbsource!\n\nWill now exit" 9 60
-					logger -t backup_restore "Could not drop old database $dbsource, exiting"
-					rm -f $dbsource.gz > /dev/null 2>&1
-                    clear
-                    exit
+                    echo "60" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: $dbsource does not exit" 8 60; sleep 1
+					logger -t backup_restore "Could not drop database $dbsource, does not exist (anymore)"
                 fi
                 echo "62" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Creating $dbtarget" 8 60
                 if mysql --user=$MYSQLUSER -e "CREATE DATABASE "$dbtarget";"
@@ -1029,11 +1016,8 @@ esac
                     echo "56" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Dropped $dbsource" 8 60; sleep 1
 					logger -t backup_restore "Dropped old database $dbsource"
                 else
-                    dialog --backtitle "$backtitle_databases" --title "$title" --msgbox "\nThere was an error dropping database $dbsource!\n\nWill now exit" 9 60
-					logger -t backup_restore "Could not drop old database $dbsource, exiting"
-					rm -f $dbsource.gz > /dev/null 2>&1
-                    clear
-                    exit
+                    echo "60" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: $dbsource does not exit" 8 60; sleep 1
+					logger -t backup_restore "Could not drop database $dbsource, does not exist (anymore)"
 	            fi
                 echo "62" | dialog --backtitle "$backtitle_databases" --title "$title" --gauge "\nRestoring database: Creating $dbtarget" 8 60
                 if mysql --user=$MYSQLUSER --password=$MYSQLPASS -e "CREATE DATABASE "$dbtarget";"
