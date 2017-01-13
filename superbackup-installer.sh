@@ -2310,12 +2310,12 @@ exit
 ;;
 10)
 	logger -t superbackup_installer "Started the recovery procedure"
-	dialog --backtitle "$backtitle_restore" --title "$title" --yesno "\nThis will download and run the superbackup restore script.\n\nDo you want to continue?" 10 60
+	dialog --backtitle "$backtitle_restore" --title "$title" --yesno "\nThis will download and run the SuperBackup restore script.\n\nDo you want to continue?" 10 60
 	agree=$?
 	case $agree in
 	0)
     	echo "50" | dialog --backtitle "$backtitle" --title "$title" --gauge "\nDownloading restore script" 8 50 0
-        if curl -f -s -o /root/superbackup-backup-restore http://download.superbackup.com/pub/files/scripts/backup/superbackup-backup-restore.txt > /dev/null 2> /dev/null; chmod +x /root/superbackup-backup-restore > /dev/null 2>&1
+        if curl -f -s -o /root/superbackup-restore.sh https://raw.githubusercontent.com/langerak/superbackup/master/superbackup-restore.sh > /dev/null 2>&1; chmod +x /root/superbackup-restore.sh > /dev/null 2>&1
         then
             echo "100" | dialog --backtitle "$backtitle" --title "$title" --gauge "\nDownload of the restore script succeeded" 8 50 0
     		logger -t superbackup_installer "Succesfully downloaded the restorescript"
@@ -2325,7 +2325,7 @@ exit
             clear
         fi
 		clear
-		/root/superbackup-backup-restore
+		/root/superbackup-restore.sh
 		logger -t superbackup_installer "Finished using the recovery script"
 	;;
 	1)
