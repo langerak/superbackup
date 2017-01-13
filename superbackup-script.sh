@@ -11,6 +11,7 @@ cur_epoch=`date +%s`
 export LANG="en_US.UTF-8"
 export LC_NUMERIC="en_US.UTF-8"
 logger -t superbackup_script "Started the SuperBackup Script version $VERSION"
+date=`date '+%Y-%m-%dT%H:%M:%S'`
 # Load configfile:
 if [ -f /etc/superbackup/backup.conf ];
 then
@@ -565,7 +566,7 @@ that use a chroot environment (as with some DNS servers for example).
 
 There is a log available with those warnings and is placed at the
 following location:
-/var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
+/var/log/superbackup/warn/$date.warn
 
 Please refer to the logfile above and locate the file and/or folder
 that is cuasing the crash and place it on the exclude list via the
@@ -881,7 +882,7 @@ echo "- The transfer speed is limited at "$XFERSPEED"KB/sec."
 echo "- The backup root path is $BACKUPROOT and the remote backup path is $REMOTEPATH."
 if [ "$LOGGING" = "Y" ];
 then
-	echo "- The logging functionality is enabled and the log is placed in /var/log/superbackup/rsync/`date '+%Y-%m-%d'`.log.gz"
+	echo "- The logging functionality is enabled and the log is placed in /var/log/superbackup/rsync/$date.log.gz"
 else
 	echo "- The logging functionality is disabled."
 fi
@@ -931,9 +932,9 @@ logger -t superbackup_script "Starting rsync backup procedure"
 echo -ne "Creating backup: Please wait... \r"
 if [[ $LOGGING == "Y" ]];
 then
-        rsync --log-file=/var/log/superbackup/rsync/`date '+%Y-%m-%d'`.log -e 'ssh -oStrictHostKeyChecking=no -p '$SSHPORT' -i '$PRIVKEY --bwlimit=$XFERSPEED --link-dest=$PREVDIR --delete -apSH --exclude-from "/etc/superbackup/excludes.rsync" $CPEXCLUDES $BACKUPROOT $BUSER@$BSERVER:$REMOTEPATH$DIR > /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp 2>&1; retval=$?
+        rsync --log-file=/var/log/superbackup/rsync/$date.log -e 'ssh -oStrictHostKeyChecking=no -p '$SSHPORT' -i '$PRIVKEY --bwlimit=$XFERSPEED --link-dest=$PREVDIR --delete -apSH --exclude-from "/etc/superbackup/excludes.rsync" $CPEXCLUDES $BACKUPROOT $BUSER@$BSERVER:$REMOTEPATH$DIR > /var/log/superbackup/temp/$date.temp 2>&1; retval=$?
 else
-        rsync -e 'ssh -oStrictHostKeyChecking=no -p '$SSHPORT' -i '$PRIVKEY --bwlimit=$XFERSPEED --link-dest=$PREVDIR --delete -apSH --exclude-from "/etc/superbackup/excludes.rsync" $CPEXCLUDES $BACKUPROOT $BUSER@$BSERVER:$REMOTEPATH$DIR > /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp 2>&1; retval=$?
+        rsync -e 'ssh -oStrictHostKeyChecking=no -p '$SSHPORT' -i '$PRIVKEY --bwlimit=$XFERSPEED --link-dest=$PREVDIR --delete -apSH --exclude-from "/etc/superbackup/excludes.rsync" $CPEXCLUDES $BACKUPROOT $BUSER@$BSERVER:$REMOTEPATH$DIR > /var/log/superbackup/temp/$date.temp 2>&1; retval=$?
 fi
 # Exit codes of the script:
 if [ $retval = 0 ];
@@ -958,10 +959,10 @@ then
 	echo -e "\nThere was an error connecting to $BSERVER, backup will not run.\n- Please make sure that the following items are correct:\n-- rsync is installed\n-- rsync daemon is running\n-- You connect to the correct machine\n-- Any firewall is open for access on port $SSHPORT"
 	logger -t superbackup_script "Rsync could not connect to $BSERVER with username $BUSER on port $SSHPORT!"
 	echo "BACKUP CRITICAL - Could not connect to remote host ($BACKUPSERVER)" > /etc/superbackup/nagios.state
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
-        cat /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
+        cat /var/log/superbackup/warn/$date.warn
         if [[ $NOTIFICATIONS == "Y" ]];
         then
             for email in `cat /etc/superbackup/recipients.mail`
@@ -970,7 +971,7 @@ then
             done
         fi
     else
-        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
     fi
 elif [ $retval = 20 ];
 then
@@ -978,10 +979,10 @@ then
 	echo -e "\nThe backupprocess received a kill from the system and therefore halted!"
 	echo "BACKUP CRITICAL - Received kill from system" > /etc/superbackup/nagios.state
 	logger -t superbackup_script "Rsync received a kill and therefore the backup did not succeed"
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
-        cat /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
+        cat /var/log/superbackup/warn/$date.warn
         if [[ $NOTIFICATIONS == "Y" ]];
         then
             for email in `cat /etc/superbackup/recipients.mail`
@@ -990,7 +991,7 @@ then
             done
         fi
     else
-        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
     fi
 elif [ $retval = 23 ];
 then
@@ -998,11 +999,11 @@ then
 	echo -ne "Creating backup: OK                   \r"; echo
 	echo "BACKUP OK - Backup succeeded" > /etc/superbackup/nagios.state
 	logger -t superbackup_script "Rsync file copy was successful, but some files were not readable"
-	if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+	if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
 	then
-		logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+		logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
 	else
-		logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+		logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
 	fi
 elif [ $retval = 24 ];
 then
@@ -1010,11 +1011,11 @@ then
 	echo -ne "Creating backup: OK                   \r"; echo
 	echo "BACKUP OK - Backup succeeded" > /etc/superbackup/nagios.state
     logger -t superbackup_script "Rsync file copy was successful, but some files have vanished during the backup process" 
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
 	else
-		logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+		logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
 	fi
 elif [ $retval = 30 ];
 then
@@ -1022,10 +1023,10 @@ then
 	echo -e "\nA timeout occurred when connecting to the backupserver!"
 	echo "BACKUP CRITICAL - Timeout occurred" > /etc/superbackup/nagios.state
 	logger -t superbackup_script "A timeout occurred connecting to $BSERVER"
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
-        cat /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
+        cat /var/log/superbackup/warn/$date.warn
         if [[ $NOTIFICATIONS == "Y" ]];
         then
             for email in `cat /etc/superbackup/recipients.mail`
@@ -1034,7 +1035,7 @@ then
             done
         fi
     else
-        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
     fi
 elif [ $retval = 35 ];
 then
@@ -1042,10 +1043,10 @@ then
 	echo -e "\nRsync on the backupserver $BSERVER is not available!"
 	echo "BACKUP CRITICAL - Rsync not running on $BACKUPSERVER" > /etc/superbackup/nagios.state
 	logger -t superbackup_script "Rsync is not running or installed on the backupserver"
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
-        cat /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
+        cat /var/log/superbackup/warn/$date.warn
         if [[ $NOTIFICATIONS == "Y" ]];
         then
             for email in `cat /etc/superbackup/recipients.mail`
@@ -1054,17 +1055,17 @@ then
             done
         fi
     else
-        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
     fi
 elif [ $retval = 134 ];
 then
 	echo -ne "Creating backup: FAILED               \r"; echo
 	echo -e "\nThe backupprocess received an abort signal from the system, the backup has halted!"
 	logger -t superbackup_script "The rsync process received an abort from the system"
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
-        cat /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
+        cat /var/log/superbackup/warn/$date.warn
         if [[ $NOTIFICATIONS == "Y" ]];
         then
             for email in `cat /etc/superbackup/recipients.mail`
@@ -1073,7 +1074,7 @@ then
             done
         fi
     else
-        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
     fi
 elif [ $retval = 137 ];
 then
@@ -1081,10 +1082,10 @@ then
 	echo -e "\nThe rsync process halted because the system has a generated an error.\n\nSee below for the files and/or directories that generated the crash and probably should be excluded in order to avoid this for the future:"
 	logger -t superbackup_script "Rsync has crashed due to a file/folder, please see the report for the file(s)/folder(s)"
 	echo "BACKUP CRITICAL - Backup segfaulted" > /etc/superbackup/nagios.state
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/$date.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
-        cat /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/$date.warn"
+        cat /var/log/superbackup/warn/$date.warn
         if [[ $NOTIFICATIONS == "Y" ]];
         then
             for email in `cat /etc/superbackup/recipients.mail`
@@ -1093,16 +1094,16 @@ then
             done
         fi
     else
-        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/$date.warn"
     fi
 else
 	echo -ne "Creating backup: FAILED               \r"; echo
 	echo -e "\nRsync exited with an unknown error. The return code is $retval.\nPlease refer to the rsync manpage (man rsync) for more information."
 	echo "BACKUP CRITICAL - Unknown error" > /etc/superbackup/nagios.state
 	logger -t superbackup_script "Rsync has quit due to unknown reasons, the return status is $retval"
-    if mv /var/log/superbackup/temp/`date '+%Y-%m-%d'`.temp /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn > /dev/null 2>&1
+    if mv /var/log/superbackup/temp/`date '+%Y-%m-%dT%H:%M:%S'`.temp /var/log/superbackup/warn/$date.warn > /dev/null 2>&1
     then
-        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Warn log placed in /var/log/superbackup/warn/`date '+%Y-%m-%dT%H:%M:%S'`.warn"
         if [[ $NOTIFICATIONS == "Y" ]];
         then
             for email in `cat /etc/superbackup/recipients.mail`
@@ -1111,14 +1112,14 @@ else
             done
         fi
     else
-        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%d'`.warn"
+        logger -t superbackup_script "Failed to move warn log to /var/log/superbackup/warn/`date '+%Y-%m-%dT%H:%M:%S'`.warn"
     fi
 fi
 # Gzip the rsync log:
 if [ $LOGGING = "Y" ];
 then
 	echo -ne "Compressing log: Please wait... \r"
-	if gzip -f /var/log/superbackup/rsync/`date '+%Y-%m-%d'`.log
+	if gzip -f /var/log/superbackup/rsync/$date.log
 	then
     	echo -e "Compressing log: OK                \r"; echo
 	else
